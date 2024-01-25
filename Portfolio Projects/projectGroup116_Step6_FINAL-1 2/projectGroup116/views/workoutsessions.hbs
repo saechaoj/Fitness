@@ -1,0 +1,139 @@
+<!--
+Oregon State University
+Authors: Jarrod Saechao and James Lee
+Course: CS 340
+Group: 116
+Assignment: Project Step 3 Draft 
+Due Date: 2022-10-27
+Description: Workout Sessions Page
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Workout Sessions</title>
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body name="workoutsessions">
+    {{!-- scripts --}}
+    <script src="./js/toggle_element.js"></script>
+
+    {{!-- Header --}}
+    <header>
+        <h1>Fitness Management System</h1>
+        <h2>Workout Sessions</h2>
+    </header>
+
+    {{!-- Navigation --}}
+    <nav>
+        <a href="./">Home</a> | 
+        <a href="./trainers">Trainers</a> | 
+        <a href="./clients">Clients</a> | 
+        <a href="./workoutsessions">Workout Sessions</a> | 
+        <a href="./sales">Sales</a> | 
+        <a href="./payments">Payments</a>
+    </nav>
+    
+    {{!-- Body --}}
+    <div>
+        {{!-- Add toggle button --}}
+        <button id="add-toggle" name="Add Session" onclick="toggleDisplay('add-fieldset', 'add-toggle')">Add Session</button>
+        
+        {{!-- Add Form --}}
+        <fieldset id="add-fieldset" style="display: none">
+            <legend>Add Session</legend>
+            <form action="" id="add-form" submit="true">
+                <label for="add-trainer">Select Trainer:</label>
+                <select id="add-trainer" name="trainer_id" required>
+                    <option value="" selected>--Select Trainer--</option>
+                    {{#each trainer_data}}
+                    <option value="{{this.trainerID}}">{{this.Trainer}}</option>
+                    {{/each}}
+                </select>
+                <label for="add-clients">Select Clients (multiselect):</label>
+                <select id="add-clients" name="clients" multiple required>
+                    {{#each client_data}}
+                    <option value="{{this.clientID}}">{{this.Client}}</option>
+                    {{/each}}
+                </select>
+                <label for="add-sessionDate">Session Date</label>
+                <input type="date" id="add-sessionDate" name="session_date" required>
+                <label for="add-startTime">Start Time (Between 07:00 AM - 07:00 PM)</label>
+                <input type="time" id="add-startTime" name="start_time" min="07:00" max="19:00" required>
+                <input type="submit" id="add-session" value="Submit">
+            </form>
+            <script src="./js/add_form.js"></script>
+        </fieldset>
+        
+        {{!-- Hide Edit Form Button --}}
+        <button id="edit-toggle" onclick="toggleDisplay('edit-fieldset'); toggleDisplay('edit-toggle')" style="display: none">Hide Form</button>
+
+        {{!-- Edit Form --}}
+        <fieldset id="edit-fieldset" style="display: none">
+            <legend>Edit Session</legend>
+            <form action="" id="edit-form" submit="true">
+                
+                <label for="edit-sessionID">Session ID:</label>
+                <input type="text" id="edit-sessionID" name="session_id" disabled>
+                <label for="edit-trainer">Select Trainer:</label>
+                <select id="edit-trainer" name="trainer_id" required>
+                    <option value="" selected>--Select Trainer--</option>
+                    {{#each trainer_data}}
+                    <option value="{{this.trainerID}}">{{this.Trainer}}</option>
+                    {{/each}}
+                </select>
+                <label for="edit-clients">Select Clients (multiselect):</label>
+                <select id="edit-clients" name="clients" multiple required>
+                    {{#each client_data}}
+                    <option value="{{this.clientID}}">{{this.Client}}</option>
+                    {{/each}}
+                </select>
+                <label for="edit-sessionDate">Session Date</label>
+                <input type="date" id="edit-sessionDate" name="session_date" required>
+                <label for="edit-startTime">Start Time (Between 07:00 AM - 07:00 PM)</label>
+                <input type="time" id="edit-startTime" name="start_time" min="07:00" max="19:00" required>
+                <input type="submit" id="edit-session" value="Submit">
+            </form>
+            <script src="./js/edit_form.js"></script>
+        </fieldset>
+
+        {{!-- Data Table --}}
+        <table id="data-table">
+            <thead>
+                <tr id="data-headers">
+                    {{#each session_data.[0]}}
+                    <th id="head-{{@key}}">{{@key}}</th>
+                    {{/each}}
+                    <th id="head-edit">Edit Session</th>
+                    <th id="head-delete">Delete Session</th>
+                </tr>
+                <script>
+                    // remove clientID column header
+                    let th = document.getElementById('head-clientID');
+                    th.remove();
+                    // remove trainerID column header
+                    th = document.getElementById('head-trainerID');
+                    th.remove();
+                </script>
+            </thead>
+            <tbody id="data-rows">
+                {{#each session_data}}
+                <tr class="row-{{this.[Session ID]}}">
+                    <td class="data-col" id="edit-sessionID-{{this.[Session ID]}}" value="{{this.[Session ID]}}">{{this.[Session ID]}}</td>
+                    <td class="data-col" id="edit-sessionDate-{{this.[Session ID]}}">{{formatdate this.Date}}</td>
+                    <td class="data-col" id="select-{{this.[Session ID]}}" value="{{this.trainerID}}">{{this.Trainer}}</td>
+                    <td class="data-col multiselect-{{this.[Session ID]}}" value="{{this.clientID}}">{{this.Client}}</td>
+                    <td class="data-col" id="edit-startTime-{{this.[Session ID]}}">{{this.[Start Time]}}</td>
+                    <td class="data-col">{{this.[End Time]}}</td>
+                    <td class="edit-col"><button onclick="toggleDisplay('edit-toggle'); toggleDisplay('edit-fieldset');fillEditForm({{this.[Session ID]}});">Edit Session</button></td>
+                    <td class="del-col"><button onclick="deleteConfirm({{this.[Session ID]}},' all entries with session id: {{this.[Session ID]}} ')">Delete Session</button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <script src="./js/confirm_del.js"></script>
+        <script src="./js/fill_edit_form.js"></script>
+    </div>
+    <footer>Fitness Management System &copy; 2022 Jarrod Saechao and James Lee</footer>
+</body>
+</html>

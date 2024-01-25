@@ -1,0 +1,25 @@
+/*
+Oregon State University
+Authors: Jarrod Saechao and James Lee
+Course: CS 340
+Group: 116
+Assignment: Project Step 3 Draft 
+Due Date: 2022-10-27
+Description: Stylesheet
+*/
+
+th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #021488;
+    color: white;
+}
+
+td, th {
+    border: 1px;
+}
+
+tr:nth-child(even) {background-color: rgb(197, 197, 197);}
+
+tr:hover {background-color:rgb(166, 165, 165)}

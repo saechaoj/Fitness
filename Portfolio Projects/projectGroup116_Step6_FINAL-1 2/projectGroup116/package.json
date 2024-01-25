@@ -1,0 +1,28 @@
+{
+  "name": "fitness_management_system",
+  "version": "1.0.0",
+  "description": "Team Project for creating a relational database.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "forever start app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jot33/osu_cs340_f22_project.git"
+  },
+  "author": "James Lee, Jarrod Saechao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jot33/osu_cs340_f22_project/issues"
+  },
+  "homepage": "https://github.com/jot33/osu_cs340_f22_project#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.6",
+    "forever": "^0.14.2",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.20"
+  }
+}

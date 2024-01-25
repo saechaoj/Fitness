@@ -1,0 +1,132 @@
+<!--
+Oregon State University
+Authors: Jarrod Saechao and James Lee
+Course: CS 340
+Group: 116
+Assignment: Project Step 3 Draft 
+Due Date: 2022-10-27
+Description: Clients Page
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Clients</title>
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body name="clients">
+    {{!-- scripts --}}
+    <script src="./js/toggle_element.js"></script>
+
+    {{!-- Header --}}
+    <header>
+        <h1>Fitness Management System</h1>
+        <h2>Clients</h2>
+    </header>
+
+    {{!-- Navigation --}}
+    <nav>
+        <a href="/">Home</a> | 
+        <a href="/trainers">Trainers</a> | 
+        <a href="/clients">Clients</a> | 
+        <a href="/workoutsessions">Workout Sessions</a> | 
+        <a href="/sales">Sales</a> | 
+        <a href="/payments">Payments</a>
+    </nav>
+
+    {{!-- Body --}}
+    <div>
+        
+        {{!-- Add toggle button --}}
+        <button id="add-toggle" name="Add Client" onclick="toggleDisplay('add-fieldset', 'add-toggle')">Add Client</button>
+
+        {{!-- Add Form --}}
+        <fieldset id="add-fieldset" style="display: none">
+            <legend>Add Client</legend>
+            <form action="/add-client" method="POST" id="add-client-form" submit="true">
+                <label for="add-fname">First Name</label>
+                <input type="text" id="add-fname" name="add-fname" required>
+                <label for="add-lastName">Last Name</label>
+                <input type="text" id="add-lname" name="add-lname" required>
+                <label for="add-email">Email</label>
+                <input type="email" id="add-email" name="add-email" required>
+                <label for="add-phone">Phone Number</label>
+                <input type="number" id="add-phone" name="add-phone" required>
+                
+                <div>
+                    <label for="add-membership-checkbox">Add membership? (optional)</label>
+                    <input type="checkbox" id="add-membership-checkbox">
+                    <div id="membership-data" style="{display: none}">
+                        <label for="member-since">Member Signup Date</label>
+                        <input type="date" id="member-since" name="member_since">
+                        <label for="member-level"></label>
+                        <select name="member_level" id="member-level">
+                            <option value="" selected>--Choose Member Level--</option>
+                            <option value="0">Wimpy</option>
+                            <option value="1">Swoll</option>
+                            <option value="2">Extreme Body Builder</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="submit" id="add-client" value="Submit">
+
+            </form>
+        </fieldset>
+
+        {{!-- Edit Form --}}
+        <fieldset id="edit-fieldset" style="display: none">
+            <legend>Edit client</legend>
+            <form action="" id="edit-form" submit="true">
+                <label for="edit-choice">Choose client</label>
+                <label for="editID">client ID</label>
+                <input type="number" id="editID" name="editID" disabled>
+                <label for="edit-firstName">First Name</label>
+                <input type="text" id="edit-firstName" name="firstName">
+                <label for="edit-lastName">Last Name</label>
+                <input type="text" id="edit-lastName" name="lastName">
+                <label for="edit-clientEmail">Email</label>
+                <input type="email" id="edit-clientEmail" name="clientEmail">
+                <label for="edit-clientPhone">Phone Number</label>
+                <input type="number" id="edit-clientPhone" name="clientPhone">
+                <input type="submit" id="edit-submit" value="Submit">
+            </form>
+            <script src="./js/edit_form.js"></script>
+        </fieldset>
+
+        <table id="data-table">
+            <thead>
+                <tr id="data-headers">
+                    {{#each headData.[0]}}
+                    <th>{{@key}}</th>
+                    {{/each}}
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="data-rows">
+                {{#each data}}
+                <tr id="{{this.clientID}}" data-value="{{this.clientID}}">
+                    <td class="data-col" id="editID-{{this.clientID}}">{{this.clientID}}</td>
+                    <td class="data-col" id="edit-firstName-{{this.clientID}}">{{this.firstName}}</td>
+                    <td class="data-col" id="edit-lastName-{{this.clientID}}">{{this.lastName}}</td>
+                    <td class="data-col" id="edit-clientEmail-{{this.clientID}}">{{this.clientEmail}}</td>
+                    <td class="data-col" id="edit-clientPhone-{{this.clientID}}">{{this.clientPhone}}</td>
+                    <td class="edit-col">
+                        <button id="edit-button-{{this.clientID}}"
+                        class="edit-button"
+                        name="Edit"
+                        onclick="toggleDisplay('edit-fieldset','edit-button-{{this.clientID}}', 'edit-button'); fillEditForm({{this.clientID}});">
+                            Edit
+                        </button>
+                    </td>
+                    <td class="del-col"><button onclick="deleteConfirm({{this.clientID}})">Delete</button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <script src="./js/confirm_del.js"></script>
+        <script src="./js/fill_edit_form.js"></script>
+    </div>
+    <footer>Fitness Management System &copy; 2022 Jarrod Saechao and James Lee</footer>
+</body>
+</html>

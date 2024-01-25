@@ -1,0 +1,84 @@
+<!--
+Oregon State University
+Authors: Jarrod Saechao and James Lee
+Course: CS 340
+Group: 116
+Assignment: Project Step 3 Draft 
+Due Date: 2022-10-27
+Description: Payments Page
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Payments</title>
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body name="payments">
+    {{!-- scripts --}}
+    <script src="./js/toggle_element.js"></script>
+    <script src"./js/get_session_dates.js"></script>
+
+    {{!-- Header --}}
+    <header>
+        <h1>Fitness Management System</h1>
+        <h2>Payments</h2>
+    </header>
+    
+    {{!-- Navigation --}}
+    <nav>
+        <a href="./">Home</a> | 
+        <a href="./trainers">Trainers</a> | 
+        <a href="./clients">Clients</a> | 
+        <a href="./workoutsessions">Workout Sessions</a> | 
+        <a href="./sales">Sales</a> | 
+        <a href="./payments">Payments</a>
+    </nav>
+
+    {{!-- Body --}}
+    <div>
+        <p>NOTE 1: Payments can only be refunded (edits and deletes prohibited)</p>
+        <p>NOTE 2: Click on sale in the Sales page to make a payment</p>
+
+        {{!-- Data Table --}}
+        <table id="data-table">
+            <thead>
+                <tr id="data-headers">
+                    {{#each data.[0]}}
+                    <th id="head-{{@key}}">{{@key}}</th>
+                    {{/each}}
+                    {{!-- <th id="head-refund">Refund Sale</th> --}}
+                </tr>
+                <script>
+                    let th = document.getElementById('head-clientID');
+                    th.remove();
+                </script>
+            </thead>
+            <tbody id="data-rows">
+                {{#each data}}
+                <tr class="row-">
+                    {{!-- DATA COLUMNS --}}
+                    {{!-- Match id and value to the edit form for use in fill_edit_form.js --}}
+                    <td class="edit-col">{{this.[Payment ID]}}</td>
+                    <td class="edit-col">{{this.[Sale ID]}}</td>
+                    <td class="edit-col">{{formatdate this.[Payment Date]}}</td>
+                    <td class="edit-col">{{this.[Payment Amount]}}</td>
+                    <td class="edit-col">{{this.[Payment Type]}}</td>
+                    <td class="edit-col">{{this.[Card Number]}}</td>
+                    <td class="edit-col">{{formatdate this.[Card Expiration]}}</td>
+                    <td class="edit-col">{{this.[Card CVV]}}</td>
+                    <td class="edit-col">{{this.Purchaser}}</td>
+                    {{!-- EDIT/DELETE BUTTONS --}}
+                    {{!-- <td class="refund-col">
+                        <button onclick="refund_payment('{{this.[Payment ID]}}')">Refund Sale</button>
+                    </td> --}}
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <script src="./js/confirm_del.js"></script>
+        <script src="./js/refund_payment.js"></script>
+    </div>
+    <footer>Fitness Management System &copy; 2022 Jarrod Saechao and James Lee</footer>
+</body>
+</html>

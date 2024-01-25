@@ -1,0 +1,225 @@
+<!--
+Oregon State University
+Authors: Jarrod Saechao and James Lee
+Course: CS 340
+Group: 116
+Assignment: Project Step 3 Draft 
+Due Date: 2022-10-27
+Description: Sales Page
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sales</title>
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body name="sales">
+    {{!-- scripts --}}
+    <script src="./js/toggle_element.js"></script>
+
+    {{!-- Header --}}
+    <header>
+        <h1>Fitness Management System</h1>
+        <h2>Sales</h2>
+    </header>
+    
+    {{!-- Navigation --}}
+    <nav>
+        <a href="./">Home</a> | 
+        <a href="./trainers">Trainers</a> | 
+        <a href="./clients">Clients</a> | 
+        <a href="./workoutsessions">Workout Sessions</a> | 
+        <a href="./sales">Sales</a> | 
+        <a href="./payments">Payments</a>
+    </nav>
+
+    {{!-- Body --}}
+    <div>
+        {{!-- Add toggle button --}}
+        <button id="add-toggle" 
+        name="Add Sale" 
+        onclick="toggleDisplay('add-fieldset', 'add-toggle')">
+            Add Sale
+        </button>
+        
+        {{!-- Add Form --}}
+        <fieldset id="add-fieldset" style="display: none">
+            <legend>Add Sale</legend>
+            <form action="" id="add-form" submit="true">
+                <label for="add-saleType">Sale Type:</label>
+                <select name="sale_type" id="add-saleType" required>
+                    <option value="" selected>--Select Type--</option>
+                    <option value="0">SESSION</option>
+                    <option value="1">MERCHANDISE</option>
+                </select>
+                <label for="add-saleDate">Sale Date</label>
+                <input type="date" id="add-SaleDate" name="sale_date" required>
+                <label for="add-saleAmount">Sale Amount</label>
+                <input type="number" id="add-SaleAmount" name="sale_amount" required>
+                <p>Add Session Details (enabled only for SESSION sale type)</p>
+                <label for="add-sessionTrainer">Choose Session Trainer</label>
+                <select id="add-sessionTrainer" name="trainer_id" disabled>
+                    <option value="" selected>--Session Trainer--</option>
+                    {{#each trainer_data}}
+                    <option value="{{this.trainerID}}">{{this.Trainer}}</option>
+                    {{/each}}
+                </select>
+                <label for="add-sessionDate">Choose Session Date</label>
+                <select name="session_date" id="add-sessionDate" disabled>
+                    <option value="" selected>--Session Date--</option>
+                </select>
+                <label for="add-sessionTime">Choose Session Time</label>
+                <select name="session_time" id="add-sessionTime" disabled>
+                    <option value="" selected>--Session Time--</option>
+                </select>
+                <label for="add-sessionClient">Choose Session Client</label>
+                <select name="session_client" id="add-sessionClient" disabled>
+                    <option value="" selected>--Session Client--</option>
+                </select>
+                <input type="submit" id="add-sale" value="Submit">
+            </form>
+            <script src="./js/add_form.js"></script>
+            <script src="./js/sales_dropdowns.js"></script>
+        </fieldset>
+        
+        {{!-- Hide Edit Form Button --}}
+        <button id="edit-toggle" onclick="toggleDisplay('edit-fieldset'); toggleDisplay('edit-toggle')" style="display: none">Hide Form</button>
+
+        {{!-- Edit Form --}}
+        <fieldset id="edit-fieldset" style="display: none">
+            <legend>Edit Sale</legend>
+            <form action="" id="edit-form" submit="true">
+                <label for="edit-saleID">Sale ID:</label>
+                <input type="text" id="edit-saleID" name="sale_id" disabled>
+                <label for="edit-saleType">Sale Type:</label>
+                <select name="sale_type" id="edit-saleType" required>
+                    <option value="" selected>--Select Type--</option>
+                    <option value="0">SESSION</option>
+                    <option value="1">MERCHANDISE</option>
+                </select>
+                <label for="edit-saleDate">Sale Date</label>
+                <input type="date" id="edit-saleDate" name="sale_date" required>
+                <label for="edit-saleAmount">Sale Amount</label>
+                <input type="number" id="edit-saleAmount" name="sale_amount" required>
+                <p>Edit Session Details (enabled only for SESSION sale type)</p>
+                <label for="edit-sessionTrainer">Choose Session Trainer</label>
+                <select id="edit-sessionTrainer" name="trainer_id" disabled>
+                    <option value="" selected>--Session Trainer--</option>
+                    {{#each trainer_data}}
+                    <option value="{{this.trainerID}}">{{this.Trainer}}</option>
+                    {{/each}}
+                </select>
+                <label for="edit-sessionDate">Choose Session Date</label>
+                <select name="session_date" id="edit-sessionDate" disabled>
+                    <option value="" selected>--Session Date--</option>
+                </select>
+                <label for="edit-sessionTime">Choose Session Time</label>
+                <select name="session_time" id="edit-sessionTime" disabled>
+                    <option value="" selected>--Session Time--</option>
+                </select>
+                <label for="edit-sessionClient">Choose Session Client</label>
+                <select name="session_client" id="edit-sessionClient" disabled>
+                    <option value="" selected>--Session Client--</option>
+                </select>
+                <input type="submit" id="edit-sale" value="Submit">
+            </form>
+            <script src="./js/edit_form.js"></script>
+            <script src="./js/fill_edit_form.js"></script>
+            <script src="./js/sales_dropdowns.js"></script>
+        </fieldset>
+
+        {{!-- Data Table --}}
+        <table id="data-table">
+            <thead>
+                <tr id="data-headers">
+                    {{#each data.[0]}}
+                    <th id="head-{{@key}}">{{@key}}</th>
+                    {{/each}}
+                    <th id="head-edit">Edit Sale</th>
+                    <th id="head-delete">Delete Sale</th>
+                    <th id="head-payment">Make Payment</th>
+                </tr>
+                <script>
+                    let th = document.getElementById('head-clientID');
+                    th.remove();
+                    th = document.getElementById('head-trainerID');
+                    th.remove();
+                </script>
+            </thead>
+            <tbody id="data-rows">
+                {{#each data}}
+                <tr class="row-">
+                    {{!-- DATA COLUMNS --}}
+                    {{!-- Match id and value to the edit form for use in fill_edit_form.js --}}
+                    <td class="data-col pay-saleID-{{this.[Sale ID]}}" id="edit-saleID-{{this.[Sale ID]}}" value="{{this.[Sale ID]}}">{{this.[Sale ID]}}</td>
+                    <td class="data-col pay-saleDate-{{this.[Sale ID]}}" id="edit-saleDate-{{this.[Sale ID]}}" value="{{this.[Sale Date]}}">{{formatdate this.[Sale Date]}}</td>
+                    <td class="data-col pay-saleType-{{this.[Sale ID]}}" id="edit-saleType-{{this.[Sale ID]}}" name="{{this.[Sale Type]}}">{{this.[Sale Type]}}</td>
+                    <td class="data-col pay-sessionTrainer-{{this.[Sale ID]}}" id="edit-sessionTrainer-{{this.[Sale ID]}}" name="{{this.trainerID}}">{{this.Trainer}}</td>
+                    <td class="data-col pay-sessionClient-{{this.[Sale ID]}}" id="edit-sessionClient-{{this.[Sale ID]}}" value="{{this.clientID}}">{{this.Client}}</td>
+                    <td class="data-col pay-saleAmount-{{this.[Sale ID]}}" id="edit-saleAmount-{{this.[Sale ID]}}" value="{{this.[Sale Amount]}}">{{this.[Sale Amount]}}</td>
+                    <td class="data-col pay-balance-{{this.[Sale ID]}}" id="edit-balance-{{this.[Sale ID]}}">{{this.[Outstanding Balance]}}</td>
+                    {{!-- EDIT/DELETE BUTTONS --}}
+                    <td class="edit-col">
+                        <button id="edit-button-{{this.[Sale ID]}}" 
+                        class="edit-button" 
+                        onclick="toggleDisplay('edit-fieldset', 'edit-button-{{this.[Sale ID]}}', 'edit-button'); fillEditFormSales({{this.[Sale ID]}});" 
+                        name="Edit Sale">
+                            Edit Sale
+                        </button>
+                    </td>
+                    <td class="del-col">
+                        <button onclick="deleteConfirm({{this.[Sale ID]}}, ' this sale')">Delete Sale</button>
+                    </td>
+                    <td class="pay-col">
+                        <button id="pay-button-{{this.[Sale ID]}}" 
+                        class="pay-button" 
+                        onclick="toggleDisplay('pay-fieldset', 'pay-button-{{this.[Sale ID]}}', 'pay-button'); fillEditFormSales({{this.[Sale ID]}}, true)" 
+                        name="Add Payment">
+                            Add Payment
+                        </button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <script src="./js/confirm_del.js"></script>
+        <script src="./js/fill_edit_form_sales.js"></script>
+
+        {{!-- Make payment Form --}}
+        <fieldset id="pay-fieldset" style="display: none">
+            <legend>Make Payment</legend>
+            <form action="" id="pay-form" submit="true">
+                <label for="pay-saleID">Sale ID</label>
+                <input type="text" id="pay-saleID" name="sale_id" disabled>
+                <label for="pay-balance">Current Balance</label>
+                <input type="text" id="pay-balance" name="pay_balance" disabled>
+                <label for="pay-saleAmount">Enter Payment Amount:</label>
+                <input type="number" id="pay-saleAmount" max="" required>
+                <label for="pay-type">Select Payment Type:</label>
+                <select name="pay_type" id="pay-saleType" required>
+                    <option value="">--Select Payment Type--</option>
+                    <option value="0">CASH</option>
+                    <option value="1">VISA</option>
+                    <option value="2">MASTERCARD</option>
+                    <option value="3">AMEX</option>
+                </select>
+                <div id="card-info" style="display: block">
+                    <label for="pay-cardNumber">Enter Card Number:</label>
+                    <input id="pay-cardNumber" type="number" name="card_number">
+                    <label for="pay-cardExpiration">Card Expiration</label>
+                    <input type="date" id="pay-cardExpiration" name="card_exp">
+                    <label for="pay-cardCVV">CVV</label>
+                    <input type="number" id="pay-cardCVV" name="card_cvv" min="0" max="9999">
+                </div>
+                <label for="pay-sessionClient">Select Paying Client</label>
+                <select name="purchaser" id="pay-sessionClient">
+                    <option value="">--Select Client--</option>
+                </select>
+                <input type="submit" id="pay-sale" value="Submit">
+            </form>
+        </fieldset>
+    </div>
+    <footer>Fitness Management System &copy; 2022 Jarrod Saechao and James Lee</footer>
+</body>
+</html>

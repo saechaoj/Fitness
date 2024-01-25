@@ -1,0 +1,122 @@
+<!--
+Oregon State University
+Authors: Jarrod Saechao and James Lee
+Course: CS 340
+Group: 116
+Assignment: Project Step 3 Draft 
+Due Date: 2022-10-27
+Description: Trainers Page
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Trainers</title>
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body name="trainers">
+    {{!-- scripts --}}
+    <script src="./js/toggle_element.js"></script>
+
+    {{!-- Header --}}
+    <header>
+        <h1>Fitness Management System</h1>
+        <h2>Trainers</h2>
+    </header>
+
+    {{!-- Navigation --}}
+    <nav>
+        <a href="/">Home</a> | 
+        <a href="/trainers">Trainers</a> | 
+        <a href="/clients">Clients</a> | 
+        <a href="/workoutsessions">Workout Sessions</a> | 
+        <a href="/sales">Sales</a> | 
+        <a href="/payments">Payments</a>
+    </nav>
+
+    {{!-- Body --}}
+    <div>
+        {{!-- Add toggle button --}}
+        <button id="add-toggle" name="Add Trainer" onclick="toggleDisplay('add-fieldset', 'add-toggle')">Add Trainer</button>
+
+        {{!-- Add Form --}}
+        <fieldset id="add-fieldset" style="display: none">
+            <legend>Add Trainer</legend>
+            <form action="/add-trainer" method="POST" id="add-trainer-form">                
+                <label for="add-pay">Pay Rate</label>
+                <input type="number" id="add-pay" name="add-pay" required>
+                <label for="add-fname">First Name</label>
+                <input type="text" id="add-fname" name="add-fname" required>
+                <label for="add-lastName">Last Name</label>
+                <input type="text" id="add-lname" name="add-lname" required>
+                <label for="add-email">Email</label>
+                <input type="email" id="add-email" name="add-email" required>
+                <label for="add-phone">Phone Number</label>
+                <input type="number" id="add-phone" name="add-phone" required>
+                <input type="submit" id="add-trainer" value="Submit">
+            </form>
+        </fieldset>
+
+        {{!-- Edit Toggle Button --}}
+        <button id="edit-toggle" onclick="toggleDisplay('edit-fieldset'); toggleDisplay('edit-toggle')" style="display: none">Hide Form</button>
+
+        {{!-- Edit Form --}}
+        <fieldset id="edit-fieldset" style="display: none">
+            <legend>Edit trainer</legend>
+            <form action="" id="edit-form">
+                <label for="edit-choice">Choose trainer</label>
+                <label for="editID">trainer ID</label>
+                <input type="number" id="editID" name="editID" disabled>
+                <label for="edit-payRate">Pay Rate</label>
+                <input type="number" id="edit-payRate" name="payRate">
+                <label for="edit-firstName">First Name</label>
+                <input type="text" id="edit-firstName" name="firstName">
+                <label for="edit-lastName">Last Name</label>
+                <input type="text" id="edit-lastName" name="lastName">
+                <label for="edit-trainerEmail">Email</label>
+                <input type="email" id="edit-trainerEmail" name="trainerEmail">
+                <label for="edit-trainerPhone">Phone Number</label>
+                <input type="number" id="edit-trainerPhone" name="trainerPhone">
+                <input type="submit" id="edit-submit" value="Submit">
+            </form>
+            <script src="./js/edit_form.js"></script>
+        </fieldset>
+
+        <table id="data-table">
+            <thead>
+                <tr id="data-headers">
+                    {{#each headData.[0]}}
+                    <th>{{@key}}</th>
+                    {{/each}}
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="data-rows">
+                {{#each data}}
+                <tr id="{{this.trainerID}}" data-value="{{this.trainerID}}">
+                    <td class="data-col" id="editID-{{this.trainerID}}">{{this.trainerID}}</td>
+                    <td class="data-col" id="edit-payRate-{{this.trainerID}}">{{this.payRate}}</td>
+                    <td class="data-col"id="edit-firstName-{{this.trainerID}}">{{this.firstName}}</td>
+                    <td class="data-col"id="edit-lastName-{{this.trainerID}}">{{this.lastName}}</td>
+                    <td class="data-col"id="edit-trainerEmail-{{this.trainerID}}">{{this.trainerEmail}}</td>
+                    <td class="data-col"id="edit-trainerPhone-{{this.trainerID}}">{{this.trainerPhone}}</td>
+                    <td class="edit-col">
+                        <button id="edit-button-{{this.trainerID}}"
+                        class="edit-button"
+                        name="Edit"
+                        onclick="toggleDisplay('edit-fieldset','edit-button-{{this.trainerID}}', 'edit-button'); fillEditForm({{this.trainerID}});">
+                            Edit
+                        </button>
+                    </td>
+                    <td class="del-col"><button onclick="deleteConfirm({{this.trainerID}})">Delete</button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <script src="./js/confirm_del.js"></script>
+        <script src="./js/fill_edit_form.js"></script>
+    </div>
+    <footer>Fitness Management System &copy; 2022 Jarrod Saechao and James Lee</footer>
+</body>
+</html>
